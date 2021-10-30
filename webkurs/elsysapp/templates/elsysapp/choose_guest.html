@@ -53,7 +53,7 @@ a {
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="/static/Sigrid16.9.jpg" alt="Sigrid" width="100%">
+        <img src="/static/Sigrid16.9LowRes.jpg" alt="Sigrid" width="100%">
         <div class="carousel-caption d-none d-md-block text-white">
           <div class="bkg-color">
             <h1><strong>VELG EN GJEST OG TRYKK ENTER</strong></h1>
@@ -104,9 +104,33 @@ a {
     </a>
   </div>
 <script>
-  window.onload = function() {
-    document.getElementById("next_area").focus();
-};
+
+//Any button redirects to choose guest except Q
+document.addEventListener('keydown', function (event) {  
+  
+  //navigate pages
+  if (event.key == 'Enter') {
+        window.location.href = "/elsysapp/q_page";};
+  if (event.key == 'Backspace' ) {
+    window.location.href = "/elsysapp";};
+  
+  //moves carousel back and forth
+  if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
+    $("#carouselExampleIndicators").carousel("prev");};
+  if (event.key == 'd' ||event.key == 'ArrowRight') {
+    $("#carouselExampleIndicators").carousel("next");};
+  
+  });
+
+//gives updated src of current img
+var current_img = "Sigrid"
+$(document).ready(function() {
+$('#carouselExampleIndicators').on('slid.bs.carousel', function () {  
+   current_img = $('.active').find('img').attr('alt');
+   //alert(current_img);
+ });  
+});
+
 </script>
 </body>
 </html>
