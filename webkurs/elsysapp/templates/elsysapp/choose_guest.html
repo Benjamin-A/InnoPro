@@ -107,6 +107,12 @@ a {
   window.onload = function() {
     document.getElementById("next_area").focus();
 };
+//Any button redirects to choose guest except Q
+document.addEventListener('keydown', function (event) {  
+  if (event.key == 'Enter') {
+        window.location.href = "/elsysapp/q_page";
+  }});
+
 </script>
 </body>
 </html>
