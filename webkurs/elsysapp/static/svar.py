@@ -79,6 +79,6 @@ for i in range(5):
 print("-"*30)
 for i in range(5):
   print(f"{guest3[rand_list3[i][0]][0]} VS {guest3[rand_list3[i][1]][0]}")
-
+#
 
   #print(f"{guest1[rand_list1[i][0]]} VS {guest1[rand_list1[i][0]]}")
