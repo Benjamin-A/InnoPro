@@ -107,9 +107,8 @@ a {
     </a>
   </div>
 <script>
-
-
-
+//tracks selected img
+var current_img = "Sigrid"
 
 
 //Keyboard Buttons
@@ -117,20 +116,28 @@ document.addEventListener('keydown', function (event) {
   
   //navigate pages
   if (event.key == 'Enter') {
-        window.location.href = "/elsysapp/q_page";};
-  if (event.key == 'Backspace' ) {
-    window.location.href = "/elsysapp";};
+    if (current_img=="Sigrid"){
+      window.location.href = "/elsysapp/q_page0";}
+    
+    else if (current_img=="HMK"){
+      window.location.href = "/elsysapp/q_page1";}
+    
+    else if (current_img=="Henrik"){
+      window.location.href = "/elsysapp/q_page2";};
+  }
+  else if (event.key == 'Backspace' ) {
+    window.location.href = "/elsysapp";}
   
   //moves carousel back and forth
-  if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
-    $("#carouselExampleIndicators").carousel("prev");};
-  if (event.key == 'd' ||event.key == 'ArrowRight') {
+  else if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
+    $("#carouselExampleIndicators").carousel("prev");}
+  else if (event.key == 'd' ||event.key == 'ArrowRight') {
     $("#carouselExampleIndicators").carousel("next");};
   
   });
 
 //gives updated src of current img
-var current_img = "Sigrid"
+
 $(document).ready(function() {
 $('#carouselExampleIndicators').on('slid.bs.carousel', function () {  
    current_img = $('.active').find('img').attr('alt');

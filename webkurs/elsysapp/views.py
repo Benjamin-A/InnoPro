@@ -11,9 +11,16 @@ def index(request):
    context['all_sensor_data'] = all_sensor_data #Legger sensordata til som en variabel som kan brukes i Template. 
    return render(request, "elsysapp/index.html", context)    
 
-def q_page(request):
+def q_page0(request):
     context = {} # Tom dictionary som blir brukt senere!
-    return render(request, "elsysapp/q_page.html", context)
+    return render(request, "elsysapp/q_page0.html", context)
+def q_page1(request):
+    context = {} # Tom dictionary som blir brukt senere!
+    return render(request, "elsysapp/q_page1.html", context)
+def q_page2(request):
+    context = {} # Tom dictionary som blir brukt senere!
+    return render(request, "elsysapp/q_page2.html", context)
+
 
 def choose_guest(request):
     context = {} # Tom dictionary som blir brukt senere!
