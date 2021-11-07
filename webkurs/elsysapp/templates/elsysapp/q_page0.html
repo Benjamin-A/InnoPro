@@ -61,29 +61,89 @@ body{
   </div>
   <div class="row">
     <div class="col-sm border col-q col-num-1" id="col-num-1">
-      <h1>Hvor mange ganger har du pusset tennene dine denne uken?</h1>
+      <h1 id="left_q">Hvor mange ganger har du pusset tennene dine denne uken?</h1>
     </div>
     <div class="col-sm border col-q col-num-2" id="col-num-2">
-      <h1>Hvilket nye hjelpemiddel skulle du ønske deg du kunne brukt i hverdagen?</h1>
+      <h1 id="right_q">Hvilket nye hjelpemiddel skulle du ønske deg du kunne brukt i hverdagen?</h1>
     </div>
   </div>
 </div>
 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.
+js"></script>
 <script>
-  //Keyboard Buttons
-document.addEventListener('keydown', function (event) {  
-  //navigate pages
-  if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
-    document.getElementById("col-num-1").style.backgroundColor="cornflowerblue";
-    document.getElementById("col-num-2").style.backgroundColor="cadetblue";
-    
+  //link ids
+  var left_q = document.getElementById("left_q")
+  var right_q = document.getElementById("right_q")
+  var q_list = []
+  var left = ""
+  var right = ""
+  var current_round = 0
+  var current_winner = "None"
+  var current_looser = "None"
+  //fetch questions
+  $(document).ready(function(){
+    $.get("get_question", function(data, status){
+      q_list=data["data"]
+      left = q_list[current_round][0]
+      right = q_list[current_round][1]
+      left_q.innerHTML=left
+      right_q.innerHTML=right
+    });
+  });
+  function send_result(guest,winner,looser){
+    //this sends data to server
   }
-  if (event.key == 'd' ||event.key == 'ArrowRight'   ) {
-    document.getElementById("col-num-2").style.backgroundColor="cornflowerblue";
-    document.getElementById("col-num-1").style.backgroundColor="cadetblue";
-    
-  } 
-})
+
+
+
+  //Keyboard Buttons
+  document.addEventListener('keydown', function (event) {  
+    //navigate pages
+    if (event.key == 'Enter') {
+      if (current_winner != "None" && current_looser != "None"){
+        //post round result
+        send_result("guest1",current_winner,current_looser)
+        //prepare next round
+        current_round++
+        if (current_round<q_list.length){
+          left = q_list[current_round][0]
+          right = q_list[current_round][1]
+          left_q.innerHTML=left
+          right_q.innerHTML=right
+          left = ""
+          right = ""
+          current_winner = "None"
+          current_looser = "None"
+          document.getElementById("col-num-1").style.backgroundColor="cadetblue";
+          document.getElementById("col-num-2").style.backgroundColor="cadetblue";
+        }
+        //start new cycle
+        else{
+          window.location.href = "/";
+        }       
+      }
+    }
+    else if (event.key == 'Backspace' ) {
+      window.location.href = "/elsysapp/choose_guest";
+    }
+    else if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
+      document.getElementById("col-num-1").style.backgroundColor="cornflowerblue";
+      document.getElementById("col-num-2").style.backgroundColor="cadetblue";
+      current_winner = left
+      current_looser = right
+  
+    }
+    else if (event.key == 'd' ||event.key == 'ArrowRight'   ) {
+      document.getElementById("col-num-2").style.backgroundColor="cornflowerblue";
+      document.getElementById("col-num-1").style.backgroundColor="cadetblue";
+      current_winner = right
+      current_looser = left
+    }
+  });
+  
 </script>
 </body>
 </html>

@@ -16,11 +16,10 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
 <script>
-  
-  //Any button redirects to choose guest except Q
+  //Any button redirects to choose guest except F5, F11, Alt and Tab
   document.addEventListener('keydown', function (event) {  
   if (event.key != 'F5' && event.key != 'F11' && event.key != 'Alt'&& event.key != 'Tab') {
-        window.location.href = "/elsysapp/choose_guest";
+    window.location.href = "/elsysapp/choose_guest";
   }});
 </script>
 
