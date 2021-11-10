@@ -6,7 +6,7 @@ from elsysapp.svar import spm, edit_score
 
 # Create your views here.
 def index(request):
-   print("Dette blir printa i terminalen")
+   #print("Dette blir printa i terminalen")
    context = {}
    all_sensor_data = SensorData.objects.all() #Henter ut all sensordata fra databasen. 
    context['all_sensor_data'] = all_sensor_data #Legger sensordata til som en variabel som kan brukes i Template. 
@@ -37,19 +37,29 @@ def get_question(request):
   else:
     return JsonResponse({}, status = 400)
 
-def return_question_score(request):
-  edit_score("guest1","Hvor er du fra?","Test 1")
-  '''
-  print("aktivert\n"+ "-"*20+"\n")
+def post_question_res(request):
+  print("Post-data mottatt\n"+ "-"*20+"\n")
+  
   if request.method == "POST" :
-      data = str(spm("guest1"))
+      all_data = QueryDict(request.body)
+      data = list(all_data.values())
+      #print(data)
+      guest = data[1]
+      winner = data[2]
+      looser = data[3]
+      edit_score(guest,winner,looser)
       return JsonResponse(data={
-      'data': data,
       'status':"Success",
       }, status = 200)
+  
+  elif request.method == "GET":
+        """Dette MÅ være med! Sikkerhetsgreier."""
+        csrf.get_token(request)
+        return HttpResponse("")
+  
   else:
     return JsonResponse({}, status = 400)
-  '''
+  
 
 
 def see_results(request):

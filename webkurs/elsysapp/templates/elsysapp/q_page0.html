@@ -18,7 +18,6 @@
 
 
 
-
   <style>
       /* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
@@ -83,6 +82,25 @@ js"></script>
   var current_round = 0
   var current_winner = "None"
   var current_looser = "None"
+
+  //neccesary for security
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
   //fetch questions
   $(document).ready(function(){
     $.get("get_question", function(data, status){
@@ -93,9 +111,18 @@ js"></script>
       right_q.innerHTML=right
     });
   });
-  function send_result(guest,winner,looser){
-    //this sends data to server
-  }
+  function send_result(guest, winner, looser){
+    const csrftoken = getCookie('csrftoken');  
+    var a ={csrfmiddlewaretoken:csrftoken,'data': [guest, winner, looser]}
+    $.post( "post_question_res", a )
+      //.done(function( data ) {alert( "Data Loaded: " + data["status"] );});
+    
+    
+    /*
+    $.post("post_question_res", function(data){
+      $(".result").html( data);
+    })*/
+  };
 
 
 
@@ -105,6 +132,8 @@ js"></script>
     if (event.key == 'Enter') {
       if (current_winner != "None" && current_looser != "None"){
         //post round result
+        //alert(current_winner)
+        //alert(current_looser)
         send_result("guest1",current_winner,current_looser)
         //prepare next round
         current_round++
@@ -113,8 +142,6 @@ js"></script>
           right = q_list[current_round][1]
           left_q.innerHTML=left
           right_q.innerHTML=right
-          left = ""
-          right = ""
           current_winner = "None"
           current_looser = "None"
           document.getElementById("col-num-1").style.backgroundColor="cadetblue";
