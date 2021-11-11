@@ -3,8 +3,9 @@ from operator import le
 #from os import pardir
 import requests
 from random import randint
-
-#from webkurs.elsysapp.views import get_question
+#fetch address of csv fil to corresponding guest
+def fetch_guest_csv(guest):
+  return "C:/Users/benja/Documents/Web-kurs/djangoprosjekt/webkurs/elsysapp/static/" + guest + '.csv'
 def extract_q(list):
   q_list=[]
   for i in range(len(list)):
@@ -25,9 +26,9 @@ def read_csv(file_path):
 #compares all questions from Google forms and old questions and adds the new q
 def update_q():
   #fetching current questins & score list 
-  guest1 = read_csv('webkurs/elsysapp/static/guest1.csv')
-  guest2 = read_csv('webkurs/elsysapp/static/guest2.csv')
-  guest3 = read_csv('webkurs/elsysapp/static/guest3.csv')
+  guest1 = read_csv(fetch_guest_csv("guest1"))
+  guest2 = read_csv(fetch_guest_csv("guest2"))
+  guest3 = read_csv(fetch_guest_csv("guest3"))
   
   #make lists only containing old questions
   guest1_q = extract_q(guest1)
@@ -37,10 +38,10 @@ def update_q():
   #fetch new (and old) questions and write to temporary csv
   url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRSwEE8anKsk21yNNi6mVELFMkmVETZVEmtie6oWh9QVtUXcE3O7zuxZJxhAQd3414FIrvRgx_zVPvm/pub?output=csv'
   r = requests.get(url, allow_redirects=True)
-  open('webkurs/elsysapp/static/tester.csv', 'wb').write(r.content)
+  open(fetch_guest_csv("tester"), 'wb').write(r.content)
   
   #read temporary csv
-  data=read_csv('webkurs/elsysapp/static/tester.csv')
+  data=read_csv(fetch_guest_csv("tester"))
   
   #add new questions to old questions, whilst avoiding duplicates
   for i in data:
@@ -53,9 +54,9 @@ def update_q():
       else:
           continue
   #write to corresponding csv
-  write_csv('webkurs/elsysapp/static/guest1.csv', guest1)
-  write_csv('webkurs/elsysapp/static/guest2.csv', guest2)
-  write_csv('webkurs/elsysapp/static/guest3.csv', guest3)
+  write_csv(fetch_guest_csv("guest1"), guest1)
+  write_csv(fetch_guest_csv("guest2"), guest2)
+  write_csv(fetch_guest_csv("guest3"), guest3)
 #generate list of random numbers for each guest
 def rand_int_list(length):
   res = []
@@ -74,9 +75,6 @@ def rand_int_list(length):
     res.append([rand_a,rand_b])
   
   return res
-#fetch address of csv fil to corresponding guest
-def fetch_guest_csv(guest):
-  return "C:/Users/benja/Documents/Web-kurs/djangoprosjekt/webkurs/elsysapp/static/" + guest + '.csv'
 #returns list with 5 pairs of random questions
 def spm(guest):
   #fetching current questions & score list 
@@ -126,4 +124,4 @@ def edit_score(guest,winner,looser):
     print(winner)  
     print(looser)  
 
-update_q()
+
