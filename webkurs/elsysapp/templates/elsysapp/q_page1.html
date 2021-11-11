@@ -3,11 +3,10 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>Start Side</title>
+  <title>Bidra</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   {% load static %}
-  
-  
+ 
   <!-- CSS stylesheet -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <!-- JS scrip -->
@@ -16,15 +15,11 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'elsys-styles.css' %}">
 
-
-
-
   <style>
       /* Hide scrollbar for Chrome, Safari and Opera */
 body::-webkit-scrollbar {
   display: none;
 }
-
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -50,12 +45,12 @@ body{
   </style>
 </head>
 <body>
-
+<!--Content-->
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm border col-task">
-      <h1>
-        Hvilket spørsmål skal Lindmo spørre Hans Majestet Kong Harald V?
+      <h1 id="title_q">
+        Hvilket spørsmål skal Lindmo spørre Sigrid?
       </h1>
     </div>
   </div>
@@ -68,44 +63,68 @@ body{
     </div>
   </div>
 </div>
-
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.
 js"></script>
 <script>
-  //link ids
+  //link ids and variables
   var left_q = document.getElementById("left_q")
   var right_q = document.getElementById("right_q")
+  var title_q = document.getElementById("title_q")
   var q_list = []
   var left = ""
   var right = ""
   var current_round = 0
-  var current_winner = "None"
-  var current_looser = "None"
-  //fetch questions
+  var current_winner = ""
+  var current_looser = ""
+  const guest_ID = "guest2"
+
+  //get cookies, used for security feature
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+  //fetch questions from server
   $(document).ready(function(){
-    $.get("get_question", function(data, status){
-      q_list=data["data"]
+    const csrftoken = getCookie('csrftoken');  
+    var upstreamData = {csrfmiddlewaretoken:csrftoken,'data': [guest_ID]}
+    $.post("fetch_questions",upstreamData, function(data, status){
+      q_list=data["data"][0]
       left = q_list[current_round][0]
       right = q_list[current_round][1]
       left_q.innerHTML=left
       right_q.innerHTML=right
+      
+      guest_name=data["data"][1]
+      title_q.innerHTML="Hvilket spørsmål skal Lindmo spørre "+ guest_name+"?"
     });
   });
-  function send_result(guest,winner,looser){
-    //this sends data to server
-  }
-
-
+  //send results to server
+  function send_result(guest, winner, looser){
+    const csrftoken = getCookie('csrftoken');  
+    var a ={csrfmiddlewaretoken:csrftoken,'data': [guest, winner, looser]}
+    $.post( "post_question_res", a )
+  };
 
   //Keyboard Buttons
   document.addEventListener('keydown', function (event) {  
     //navigate pages
     if (event.key == 'Enter') {
-      if (current_winner != "None" && current_looser != "None"){
+      if (current_winner != "" && current_looser != ""){
         //post round result
-        send_result("guest3",current_winner,current_looser)
+        //alert(current_winner)
+        //alert(current_looser)
+        send_result(guest_ID,current_winner,current_looser)
         //prepare next round
         current_round++
         if (current_round<q_list.length){
@@ -113,10 +132,8 @@ js"></script>
           right = q_list[current_round][1]
           left_q.innerHTML=left
           right_q.innerHTML=right
-          left = ""
-          right = ""
-          current_winner = "None"
-          current_looser = "None"
+          current_winner = ""
+          current_looser = ""
           document.getElementById("col-num-1").style.backgroundColor="cadetblue";
           document.getElementById("col-num-2").style.backgroundColor="cadetblue";
         }

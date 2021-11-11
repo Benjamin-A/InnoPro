@@ -5,7 +5,6 @@ import requests
 from random import randint
 
 #from webkurs.elsysapp.views import get_question
-
 def extract_q(list):
   q_list=[]
   for i in range(len(list)):
@@ -110,9 +109,13 @@ def edit_score(guest,winner,looser):
       loose_i=i
       break
   if win_i!="err" and loose_i!="err":
+    print("-"*20 + "\n" + "Winner and loooser found" + "\n" + "-"*20)
     question_list[win_i][1]= int(question_list[win_i][1])+ 2
     question_list[loose_i][1]=int(question_list[loose_i][1])-1
     write_csv(fetch_guest_csv(guest), question_list)
+    print("-"*20 + "\n" + "Winner and loooser written" + "\n" + "-"*20)
   else:
-    print("Winner or Looser question not found")  
+    print("Winner or Looser question not found")
+    print(winner)  
+    print(looser)  
 #print(read_csv("webkurs/elsysapp/static/guest1.csv"))
