@@ -2,11 +2,11 @@ from django.http import HttpResponse, QueryDict,JsonResponse
 from django.shortcuts import render
 from .models import SensorData
 from django.middleware import csrf
-from elsysapp.svar import spm, edit_score
+from elsysapp.svar import spm, edit_score, update_q
 
 # Create your views here.
 def index(request):
-   #print("Dette blir printa i terminalen")
+   update_q()
    context = {}
    all_sensor_data = SensorData.objects.all() #Henter ut all sensordata fra databasen. 
    context['all_sensor_data'] = all_sensor_data #Legger sensordata til som en variabel som kan brukes i Template. 
@@ -27,7 +27,7 @@ def q_page2(request):
     return render(request, "elsysapp/q_page2.html", context)
 
 def fetch_questions(request):
-  print("Post-fetch-data mottatt\n"+ "-"*20+"\n")
+  print( "-"*20+"\n"+"Post-fetch-data mottatt\n"+ "-"*20+"\n")
   if request.method == "POST" :
       all_data = QueryDict(request.body)
       data = list(all_data.values())
@@ -44,12 +44,10 @@ def fetch_questions(request):
       'data': [data,guest_arr[guest_ID]],
       'status':"Success",
       }, status = 200)
-  
   elif request.method == "GET":
         """Dette MÅ være med! Sikkerhetsgreier."""
         csrf.get_token(request)
         return HttpResponse("")
-  
   else:
     return JsonResponse({}, status = 400)
 
