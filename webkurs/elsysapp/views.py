@@ -2,7 +2,7 @@ from django.http import HttpResponse, QueryDict,JsonResponse
 from django.shortcuts import render
 from .models import SensorData
 from django.middleware import csrf
-from elsysapp.svar import spm, edit_score, update_q
+from elsysapp.questions import spm, edit_score, update_q,  show_results
 
 # Create your views here.
 def index(request):
@@ -27,11 +27,10 @@ def q_page2(request):
     return render(request, "elsysapp/q_page2.html", context)
 
 def fetch_questions(request):
-  print( "-"*20+"\n"+"Post-fetch-data mottatt\n"+ "-"*20+"\n")
+  #print( "-"*20+"\n"+"Post-fetch-data mottatt\n"+ "-"*20+"\n")
   if request.method == "POST" :
       all_data = QueryDict(request.body)
       data = list(all_data.values())
-      #print(data)
       guest_ID = str(data[1])
       data = spm(guest_ID)
       guest_arr = {
@@ -57,7 +56,6 @@ def post_question_res(request):
   if request.method == "POST" :
       all_data = QueryDict(request.body)
       data = list(all_data.values())
-      #print(data)
       guest = data[1]
       winner = data[2]
       looser = data[3]
@@ -75,9 +73,25 @@ def post_question_res(request):
     return JsonResponse({}, status = 400)
   
 def see_results(request):
-    #print("Dette blir printa i terminalen")
+    update_q()
     context = {} # Tom dictionary som blir brukt senere!
     return render(request, "elsysapp/see_results.html", context)
+def fetch_results(request):
+  #print( "-"*20+"\n"+"Post-fetch-data mottatt\n"+ "-"*20+"\n")
+  if request.method == "POST" :
+      data = [show_results()]
+      
+
+      return JsonResponse(data={
+      'data': data,
+      'status':"Success",
+      }, status = 200)
+  elif request.method == "GET":
+        """Dette MÅ være med! Sikkerhetsgreier."""
+        csrf.get_token(request)
+        return HttpResponse("")
+  else:
+    return JsonResponse({}, status = 400)
 
 #Garbage - usefull for copy paste
 def get_sensor_data(request):
