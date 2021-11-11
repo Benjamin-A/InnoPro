@@ -26,19 +26,35 @@ def q_page2(request):
     context = {} # Tom dictionary som blir brukt senere!
     return render(request, "elsysapp/q_page2.html", context)
 
-def get_question(request):
-   # request should be ajax and method should be GET.
-  if request.method == "GET" :
-      data = spm("guest1")
+def fetch_questions(request):
+  print("Post-fetch-data mottatt\n"+ "-"*20+"\n")
+  if request.method == "POST" :
+      all_data = QueryDict(request.body)
+      data = list(all_data.values())
+      #print(data)
+      guest_ID = str(data[1])
+      data = spm(guest_ID)
+      guest_arr = {
+        "guest1":"Sigrid",
+        "guest2":"Hans Majestet Kong Harald V",
+        "guest3":"Henrik Ingebrigtsen",
+        }
+
       return JsonResponse(data={
-      'data': data,
+      'data': [data,guest_arr[guest_ID]],
       'status':"Success",
       }, status = 200)
+  
+  elif request.method == "GET":
+        """Dette MÅ være med! Sikkerhetsgreier."""
+        csrf.get_token(request)
+        return HttpResponse("")
+  
   else:
     return JsonResponse({}, status = 400)
 
 def post_question_res(request):
-  print("Post-data mottatt\n"+ "-"*20+"\n")
+  print("Post-results_data mottatt\n"+ "-"*20+"\n")
   
   if request.method == "POST" :
       all_data = QueryDict(request.body)
@@ -60,13 +76,12 @@ def post_question_res(request):
   else:
     return JsonResponse({}, status = 400)
   
-
-
 def see_results(request):
     #print("Dette blir printa i terminalen")
     context = {} # Tom dictionary som blir brukt senere!
     return render(request, "elsysapp/see_results.html", context)
 
+#Garbage - usefull for copy paste
 def get_sensor_data(request):
     if request.method == "POST": 
         data =  QueryDict(request.body) # Gjør data fra request om til en dictionary
@@ -82,7 +97,6 @@ def get_sensor_data(request):
         """Dette MÅ være med! Sikkerhetsgreier."""
         csrf.get_token(request)
         return HttpResponse("")
-
 def chart(request):
 
   labels = [] # Holder navnene på stolpene i stolpediagrammet.

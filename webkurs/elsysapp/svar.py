@@ -5,7 +5,6 @@ import requests
 from random import randint
 
 #from webkurs.elsysapp.views import get_question
-
 def extract_q(list):
   q_list=[]
   for i in range(len(list)):
