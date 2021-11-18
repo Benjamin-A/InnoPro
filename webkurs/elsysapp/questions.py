@@ -46,11 +46,11 @@ def update_q():
   
   #add new questions to old questions, whilst avoiding duplicates
   for i in data:
-      if i[1] == "Gjest 1" and  (i[2] not in guest1_q):
+      if i[1] == "Sigrid" and  (i[2] not in guest1_q):
         guest1.append([i[2],0,i[0],0,0])
-      elif i[1] == "Gjest 2"  and  (i[2] not in guest2_q):
+      elif i[1] == "HMS Kong Harald"  and  (i[2] not in guest2_q):
         guest2.append([i[2],0,i[0],0,0])
-      elif i[1] == "Gjest 3" and  (i[2] not in guest3_q):
+      elif i[1] == "Henrik Ingebrigtsen" and  (i[2] not in guest3_q):
         guest3.append([i[2],0,i[0],0,0])
       else:
           continue
