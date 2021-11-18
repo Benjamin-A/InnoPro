@@ -95,6 +95,7 @@ def spm2():#spm(guest1)
   spm("guest1")
 def spm3():#spm(guest1)
   spm("guest1")
+#Calculate a new score for the list: wins divided by tries, rounded
 def calc_score(question):
   #wins divided by tries, rounded
   return round( int(question[3])/int(question[1]),3)
@@ -169,3 +170,5 @@ def reset_all_scores():
   reset_score("guest1")
   reset_score("guest2")
   reset_score("guest3")
+
+
