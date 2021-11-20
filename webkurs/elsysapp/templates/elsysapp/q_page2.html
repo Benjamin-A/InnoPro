@@ -144,7 +144,14 @@ js"></script>
         }
         //start new cycle
         else{
-          window.location.href = "/";
+          //Clear questions and thank user
+          left_q.innerHTML=""
+          right_q.innerHTML=""     
+          title_q.innerHTML="Takk for bidraget!"
+          //Delay before redirect
+          setTimeout(function() {
+            window.location.href = "/";
+          }, 3000);
         }       
       }
     }
