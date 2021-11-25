@@ -16,7 +16,12 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 /*Disable scrolling*/
-html, body {margin: 0; height: 100%; overflow: hidden}
+
+html, body {
+  margin: 0; 
+  height: 100%; 
+  overflow: hidden
+}
 
 body{
   /*Reduse Flickering when loading page*/
@@ -36,21 +41,28 @@ body {
   font-family: 'Press Start 2P', cursive;
   overflow-x: hidden;
 }
-/*rgba(80,0,0,0.5)
+
 /*Decorate links*/
 a {
   text-decoration: underline;
   color: rgb(255, 255, 255);
 }
+
 h1 {
   font-size: xx-large;
 }
 
+.bkg-color-top{
+  --light_blue_BRDR:rgb(255, 255, 255); 
+  background-color: rgba(80,0,0,0.5);
+  padding-right: 10px;
+  padding-left: 10px;
+  border: 2px solid var(--light_blue_BRDR);
+  border-radius: 10px;  
+  padding-top: 10px;
+}
 
-.bkg-color{
-  --dark_orange_FILL:rgba(80,0,0,0.5);
-  --dark_orange_BRDR:rgba(80,0,0,0.5);
-  --light_blue_FILL:rgba(80,0,0,0.5);
+.bkg-color-bottom{
   --light_blue_BRDR:rgb(255, 255, 255); 
   background-color: rgba(80,0,0,0.5);
   width: 50%;
@@ -59,28 +71,16 @@ h1 {
   border: 2px solid var(--light_blue_BRDR);
   border-radius: 10px;  
 }
-.bkg-color-1{
-  --dark_orange_FILL:rgba(80,0,0,0.5);
-  --dark_orange_BRDR:rgba(80,0,0,0.5);
-  --light_blue_FILL:rgba(80,0,0,0.5);
-  --light_blue_BRDR:rgb(255, 255, 255); 
-  background-color: rgba(80,0,0,0.5);
-  padding-right: 10px;
-  padding-left: 10px;
 
-  border: 2px solid var(--light_blue_BRDR);
-  border-radius: 10px;  
-  padding-top: 10px;
-
-}
+/* aligning the top and bottom text boxes*/
 .oppned {
   display: flex;
   flex-flow: column;
   height: 750px;
   justify-content: space-between;
   align-items: center;
-
 }
+
 </style>
 
 </head>
@@ -97,11 +97,11 @@ h1 {
         <img src="/static/Sigrid16.9LowRes.jpg" alt="Sigrid" width="100%">
         <div class="carousel-caption d-none d-md-block text-white">
           <div class="oppned">
-            <div class="bkg-color-1">
+            <div class="bkg-color-top">
               <h1><strong>VELG EN GJEST OG TRYKK ENTER</strong></h1>
             </div>
             
-            <div class="bkg-color">
+            <div class="bkg-color-bottom">
               <h1>Sigrid</h1>
               <p>Foto: <a href="https://www.flickr.com/photos/jus10h/27770325278/in/photostream/">Justin Higuchi</a> <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a></p>
             </div>
@@ -113,11 +113,11 @@ h1 {
         <img src="/static/HMK16.9.jpg" alt="HMK" width="100%">
         <div class="carousel-caption d-none d-md-block text-white">
           <div class="oppned">
-            <div class="bkg-color-1">
+            <div class="bkg-color-top">
               <h1><strong>VELG EN GJEST OG TRYKK ENTER</strong></h1>
             </div>
             
-            <div class="bkg-color">
+            <div class="bkg-color-bottom">
             <h1>Hans Majestet Kong Harald V</h1>
             <p>Foto: <a href="https://flickr.com/photos/takleven/4694190132/in/photostream/">Tor Atle Kleven</a> <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY SA 2.0</a></p></div>
           </div>
@@ -128,11 +128,11 @@ h1 {
         <img src="/static/Henrik16.9.jpg" alt="Henrik" width="100%">
         <div class="carousel-caption d-none d-md-block text-white">
           <div class="oppned">
-            <div class="bkg-color-1">
+            <div class="bkg-color-top">
               <h1><strong>VELG EN GJEST OG TRYKK ENTER</strong></h1>
             </div>
             
-            <div class="bkg-color">
+            <div class="bkg-color-bottom">
             <h1>Henrik Ingebrigtsen</h1>
             <p>Foto: <a href="https://creativecommons.org/publicdomain/mark/1.0/">Public Domain</a></p></div>
           </div>
