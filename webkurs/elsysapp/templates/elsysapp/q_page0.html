@@ -30,7 +30,7 @@ body {
 }
 
 body{
-  background-color: cadetblue;
+  background-color: bkg_neutral;
   color: aliceblue;
   /*Hide Cursor*/
   cursor: none;
@@ -48,13 +48,34 @@ body{
       padding: 3% 3% 3% 3%;
       margin: 2% 2%;
     }
+
+    #myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+.content {
+  position: fixed;
+  bottom: 0;
+  
+  color: #f1f1f1;
+  width: 100%;
+  
+}
   </style>
 </head>
 <body>
+<!-- The video -->
+<video autoplay muted loop id="myVideo">
+  <source src="/static/bkg480.mp4" type="video/mp4">
+</video>
+
 <!--Content-->
-<div class="container-fluid">
+<div class="container-fluid content">
   <div class="row">
-    <div class="col-sm border col-task">
+    <div class="col-sm border col-task" id="col-title">
       <h1 id="title_q">
         Cookies failed to generate
       </h1>
@@ -83,6 +104,10 @@ js"></script>
   var current_winner = ""
   var current_looser = ""
   const guest_ID = "guest1"
+
+  //colors
+  bkg_neutral = "rgba(80,00,00,0.5)"
+  bkg_selected = "rgba(255,255,255,0.3)"
 
   //get cookies, used for security feature
   function getCookie(name) {
@@ -114,6 +139,10 @@ js"></script>
       //update guest name
       guest_name=data["data"][1]
       title_q.innerHTML="Hvilket spørsmål skal Lindmo spørre "+ guest_name+"?"
+      //update bkg colors
+      document.getElementById("col-title").style.backgroundColor=bkg_neutral;
+      document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
+      document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
     });
   });
   //send results to server
@@ -139,8 +168,8 @@ js"></script>
           right_q.innerHTML=right
           current_winner = ""
           current_looser = ""
-          document.getElementById("col-num-1").style.backgroundColor="cadetblue";
-          document.getElementById("col-num-2").style.backgroundColor="cadetblue";
+          document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
+          document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
         }
         //start new cycle
         else{
@@ -159,15 +188,15 @@ js"></script>
       window.location.href = "/elsysapp/choose_guest";
     }
     else if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
-      document.getElementById("col-num-1").style.backgroundColor="cornflowerblue";
-      document.getElementById("col-num-2").style.backgroundColor="cadetblue";
+      document.getElementById("col-num-1").style.backgroundColor=bkg_selected;
+      document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
       current_winner = left
       current_looser = right
   
     }
     else if (event.key == 'd' ||event.key == 'ArrowRight'   ) {
-      document.getElementById("col-num-2").style.backgroundColor="cornflowerblue";
-      document.getElementById("col-num-1").style.backgroundColor="cadetblue";
+      document.getElementById("col-num-2").style.backgroundColor=bkg_selected;
+      document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
       current_winner = right
       current_looser = left
     }
