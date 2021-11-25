@@ -14,7 +14,7 @@ def extract_q(list):
   return q_list
 #csv writing function
 def write_csv(file_path, list):
-  with open(file_path, 'w', newline="") as f: 
+  with open(file_path, 'w', newline="",encoding='utf-8') as f: 
     write = csv.writer(f) 
     write.writerows(list)
     f.close()
