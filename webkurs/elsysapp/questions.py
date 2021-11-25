@@ -20,7 +20,7 @@ def write_csv(file_path, list):
     f.close()
 #csv reading function    
 def read_csv(file_path):
-  with open(file_path, 'r', newline="") as f: 
+  with open(file_path, 'r', newline="",encoding='utf-8') as f: 
     res = list(csv.reader(f)) 
     f.close()
   return res 
@@ -88,13 +88,6 @@ def spm(guest):
   
   return res
   
-def spm1():#spm(guest1)
-  spm("guest1")
-  return "abc"
-def spm2():#spm(guest1)
-  spm("guest1")
-def spm3():#spm(guest1)
-  spm("guest1")
 #Calculate a new score for the list: wins divided by tries, rounded
 def calc_score(question):
   #wins divided by tries, rounded
@@ -170,5 +163,4 @@ def reset_all_scores():
   reset_score("guest1")
   reset_score("guest2")
   reset_score("guest3")
-
 
