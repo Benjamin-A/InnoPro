@@ -18,5 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('elsysapp/', include('elsysapp.urls')),
+    path('', include('elsysapp.urls')),
     path('admin/', admin.site.urls),
 ]

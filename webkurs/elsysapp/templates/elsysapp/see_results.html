@@ -3,12 +3,95 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>Page Title</title>
+  <title>Results Page</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-  <script src='main.js'></script>
+  {% load static %}
+  
+  
+  <!-- CSS stylesheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <!-- JS scrip -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'elsys-styles.css' %}">
+
 </head>
 <body>
-  <p>See results here!</p>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm border col-q col-num-1" id="col-num-1">
+      <h1 id="guest1H">guest1</h1>
+      <div id="guest1_div">guest1 data</div>
+    </div>
+    <div class="col-sm border col-q col-num-2" id="col-num-2">
+      <h1 id="guest2H">guest2</h1>
+      <div id="guest2_div">guest2 data</div>
+    </div>
+    <div class="col-sm border col-q col-num-3" id="col-num-3">
+      <h1 id="guest3H">guest3</h1>
+      <div id="guest3_div">guest1 data</div>
+    </div>
+
+  </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.
+js"></script>
+<script>
+  //link ids and variables
+  var guest1H = document.getElementById("guest1H")
+  var guest2H = document.getElementById("guest2H")
+  var guest3H = document.getElementById("guest3H")
+  
+  var guest1_div = document.getElementById("guest1_div")
+  var guest2_div = document.getElementById("guest2_div")
+  var guest3_div = document.getElementById("guest3_div")
+  
+  //get cookies, used for security feature
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      //alert(document.cookie)  
+      const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+  //generate string with HTML-elements containing data
+  function generateDataString(myDict) {
+    var data_string = ""
+    for (let i = 0; i < myDict.length; i++) {
+        data_string += "<p>"+myDict[i].question+" - "+myDict[i].score +"</p>" + "<br>";
+      };
+    return data_string;
+}  
+//fetch data from server
+  $(document).ready(function updateData(){
+    const csrftoken = getCookie('csrftoken');  
+    var upstreamData = {csrfmiddlewaretoken:csrftoken,'data': []}
+    $.post("fetch_results",upstreamData, function(data, status){
+      const guest_data=data["data"][0]
+      //add updated heading 
+      guest1H.innerHTML=guest_data[0][1];
+      guest2H.innerHTML=guest_data[1][1];
+      guest3H.innerHTML=guest_data[2][1];
+      //print results
+      guest1_div.innerHTML= generateDataString(guest_data[0][0])
+      guest2_div.innerHTML= generateDataString(guest_data[1][0])
+      guest3_div.innerHTML= generateDataString(guest_data[2][0])
+    });
+  });
+</script>
 </body>
 </html>

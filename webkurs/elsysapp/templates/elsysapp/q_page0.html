@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Bidra</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  {% load static %}
+ 
+  <!-- CSS stylesheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <!-- JS scrip -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'elsys-styles.css' %}">
+
+  <style>
+    /*Disable scrolling*/
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+      /* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+body{
+  background-color: bkg_neutral;
+  color: aliceblue;
+  /*Hide Cursor*/
+  cursor: none;
+
+}
+    .border {
+      border: 1px solid #CCC;
+      text-align: center;
+    }
+    .col-q{
+      padding: 10% 5%;
+      margin: 5% 5%;
+    }
+    .col-task{
+      padding: 3% 3% 3% 3%;
+      margin: 2% 2%;
+    }
+
+    #myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+.content {
+  position: fixed;
+  bottom: 0;
+  
+  color: #f1f1f1;
+  width: 100%;
+  
+}
+  </style>
+</head>
+<body>
+<!-- The video -->
+<video autoplay muted loop id="myVideo">
+  <source src="/static/bkg480.mp4" type="video/mp4">
+</video>
+
+<!--Content-->
+<div class="container-fluid content">
+  <div class="row">
+    <div class="col-sm border col-task" id="col-title">
+      <h1 id="title_q">
+        Cookies failed to generate
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm border col-q col-num-1" id="col-num-1">
+      <h1 id="left_q">Hit F12 and open Console</h1>
+    </div>
+    <div class="col-sm border col-q col-num-2" id="col-num-2">
+      <h1 id="right_q">Click the "fetch_questions:1"-url and reload this page</h1>
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.
+js"></script>
+<script>
+  //link ids and variables
+  var left_q = document.getElementById("left_q")
+  var right_q = document.getElementById("right_q")
+  var title_q = document.getElementById("title_q")
+  var q_list = []
+  var left = ""
+  var right = ""
+  var current_round = 0
+  var current_winner = ""
+  var current_looser = ""
+  const guest_ID = "guest1"
+
+  //colors
+  bkg_neutral = "rgba(80,00,00,0.5)"
+  bkg_selected = "rgba(255,255,255,0.3)"
+
+  //get cookies, used for security feature
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      //alert(document.cookie)  
+      const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+  //fetch questions from server
+  $(document).ready(function(){
+    const csrftoken = getCookie('csrftoken');  
+    var upstreamData = {csrfmiddlewaretoken:csrftoken,'data': [guest_ID]}
+    $.post("fetch_questions",upstreamData, function(data, status){
+      q_list=data["data"][0]
+      left = q_list[current_round][0]
+      right = q_list[current_round][1]
+      left_q.innerHTML=left
+      right_q.innerHTML=right
+      //update guest name
+      guest_name=data["data"][1]
+      title_q.innerHTML="Hvilket spørsmål skal Lindmo spørre "+ guest_name+"?"
+      //update bkg colors
+      document.getElementById("col-title").style.backgroundColor=bkg_neutral;
+      document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
+      document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
+    });
+  });
+  //send results to server
+  function send_result(guest, winner, looser){
+    const csrftoken = getCookie('csrftoken');  
+    var a ={csrfmiddlewaretoken:csrftoken,'data': [guest, winner, looser]}
+    $.post( "post_question_res", a )
+  };
+
+  //Keyboard Buttons
+  document.addEventListener('keydown', function (event) {  
+    //navigate pages
+    if (event.key == 'Enter') {
+      if (current_winner != "" && current_looser != ""){
+        //post round result
+        send_result(guest_ID,current_winner,current_looser)
+        //prepare next round
+        current_round++
+        if (current_round<q_list.length){
+          left = q_list[current_round][0]
+          right = q_list[current_round][1]
+          left_q.innerHTML=left
+          right_q.innerHTML=right
+          current_winner = ""
+          current_looser = ""
+          document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
+          document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
+        }
+        //start new cycle
+        else{
+          //Clear questions and thank user
+          left_q.innerHTML=""
+          right_q.innerHTML=""     
+          title_q.innerHTML="Takk for bidraget!"
+          //Delay before redirect
+          setTimeout(function() {
+            window.location.href = "/";
+          }, 3000);
+        }       
+      }
+    }
+    else if (event.key == 'Backspace' ) {
+      window.location.href = "/elsysapp/choose_guest";
+    }
+    else if (event.key == 'a' ||event.key == 'ArrowLeft' ) {
+      document.getElementById("col-num-1").style.backgroundColor=bkg_selected;
+      document.getElementById("col-num-2").style.backgroundColor=bkg_neutral;
+      current_winner = left
+      current_looser = right
+  
+    }
+    else if (event.key == 'd' ||event.key == 'ArrowRight'   ) {
+      document.getElementById("col-num-2").style.backgroundColor=bkg_selected;
+      document.getElementById("col-num-1").style.backgroundColor=bkg_neutral;
+      current_winner = right
+      current_looser = left
+    }
+  });
+  
+</script>
+</body>
+</html>
