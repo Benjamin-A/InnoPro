@@ -1,6 +1,4 @@
 import csv
-from operator import le
-#from os import pardir
 import requests
 from random import randint
 #fetch address of csv fil to corresponding guest
@@ -163,4 +161,3 @@ def reset_all_scores():
   reset_score("guest1")
   reset_score("guest2")
   reset_score("guest3")
-
